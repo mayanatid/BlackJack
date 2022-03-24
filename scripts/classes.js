@@ -1,6 +1,6 @@
 // Helper Functions
 
-// Shuffles and array
+// Shuffles an array
 // from https://javascript.info/task/shuffle
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -135,7 +135,7 @@ class Hand{
 
     // Sum up cards in hand
     sumCards = function(){
-        let sum = 0
+        let sum = 0;
         for (let i in this.cards){
             sum+= this.cards[i];
         }
@@ -239,14 +239,14 @@ class Game{
                         this.dealCount++;
                         console.log("\n");
                         console.log("Current deal count:", this.dealCount);
-                        console.log("You received a",this.player.cards[this.player.cards.length-1])
+                        console.log("You received a",this.player.cards[this.player.cards.length-1]);
                         console.log("Your new sum is ", this.player.sumCards());
                         // Deck test
                         // this.deck.summarize();
 
                         // Check for bust
                         if(this.player.status()=="Bust"){
-                            console.log("You busted! You lose :(")
+                            console.log("You busted! You lose :(");
                             this.gameStatus = "over";
                             //break;
                         }   
@@ -260,11 +260,11 @@ class Game{
             // If dealer is below 16 then they draw, otherwise not
             if(this.playerDone == true){
                 while(this.dealer.sumCards()<16){
-                    this.dealer.draw()
+                    this.dealer.draw();
                     this.dealCount++;
                     console.log("\n");
                     console.log("Current deal count:", this.dealCount);
-                    console.log("Dealer received a",this.dealer.cards[this.dealer.cards.length - 1])
+                    console.log("Dealer received a",this.dealer.cards[this.dealer.cards.length - 1]);
                     console.log("New dealer cards are: ", this.dealer.cards);
                     console.log("New dealer sum is ", this.dealer.sumCards());
                     
@@ -273,7 +273,7 @@ class Game{
 
                     // Check for bust
                     if(this.dealer.status()=="Bust"){
-                        console.log("Dealer busted! You win :)")
+                        console.log("Dealer busted! You win :)");
                         this.gameStatus = "over";
                     }
                 }
@@ -290,72 +290,3 @@ class Game{
 
     }
 }
-
-/* Test Hand class
-
-const myHand = new Hand(dealer=false);
-
-console.log(myHand.cards);
-console.log(myHand.sumCards());
-console.log(myHand.status());
-
-myHand.draw();
-console.log(myHand.cards);
-console.log(myHand.sumCards());
-console.log(myHand.status());
-
-*/
-
-// Test Game class
-
-/*
-const game = new Game();
-console.log("Player Cards",game.player.cards);
-console.log("Sum of player cards", game.player.sumCards());
-console.log("Status of player hand", game.player.status());
-
-console.log("Dealer Cards",game.dealer.cards);
-console.log("Sum of dealer cards", game.dealer.sumCards());
-console.log("Status of dealer hand", game.dealer.status());
-*/
-
-
-// Test deck class
-
-/*
-const myDeck = new Deck();
-myDeck.summarize();
-cards = myDeck.getCards();
-topCard = cards.pop();
-console.log(topCard);
-myDeck.summarize();
-console.log(myDeck.draw());
-myDeck.summarize();
-myDeck.shuffle();
-console.log(myDeck.getCards());
-*/
-
-// Re-test of Hand Class
-/*
-let tDeck = new Deck();
-let tHand = new Hand(false, tDeck);
-tDeck.summarize();
-console.log(tDeck.getCards().length);
-
-let uDeck = createDeck();
-console.log(uDeck.length);
-
-console.log(tHand.cards);
-*/
-
-// Test game
-
-const game = new Game()
-
-// Side tests
-// console.log("Player Hand: ", game.player.cards);
-// console.log("Dealer Hand: ", game.dealer.cards);
-// game.deck.summarize();
-game.dealCards();
-
-
