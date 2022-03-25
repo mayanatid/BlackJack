@@ -1,4 +1,4 @@
-// Helper Functions
+// -------------Helper Functions-------------
 
 // Shuffles an array
 // from https://javascript.info/task/shuffle
@@ -66,6 +66,17 @@ function createDeck(){
 
     return deck;
 }
+
+//-------------DOM PROPERTIES-------------
+let startButton = document.getElementById("start-el");
+let messageText = document.getElementById("message-el");
+let cardsText = document.getElementById("card-el");
+let sumText = document.getElementById("sum-el");
+let dealerCardsText = document.getElementById("dealer-card-el");
+let dealerSumText = document.getElementById("dealer-sum-el");
+
+
+// -------------CLASSES-------------
 
 // Deck class
 class Deck{
@@ -182,6 +193,8 @@ class Game{
         this.gameStatus = "going";
         this.playerDone = false;
         this.dealerDone = false;
+        this.status = "Want to play a round?";
+
     }
 
     deckSummary = function(){
@@ -193,19 +206,27 @@ class Game{
     dealCards = function(){
         console.log("Current deal count:", this.dealCount);
         while(this.gameStatus!="over"){
+            // messageText.textContent = this.status; // Update UI
             if(this.dealCount == 1 && (this.playerDone == false && this.dealerDone == false)){
                 // On the first hand can only see one of the dealer's cards
                 // Also, automatically lose if dealer has blackjack
                 if(this.dealer.status() == "BlackJack"){
+                    messageText.textContent = "Dealer has BlackJack! You lose";
+                    dealerCardsText.textContent = this.dealCards.cards;
+                    dealerSumText.textContent = this.dealCards.sumCards();
                     console.log("Dealer has BlackJack! You lose");
                     this.gameStatus = "over";
                     break;
                 }
                 // Assuming dealer did not get blackjack on first hand
                 // Show your cards and one of dealer's cards 
+                cardsText.textContent = "Cards: " + this.player.cards;
                 console.log("Your cards:",this.player.cards);
+                sumText.textContent = "Sum: " + this.player.sumCards();
                 console.log("Your card sum:",this.player.sumCards());
+                dealerCardsText.textContent = this.dealer.cards[0];
                 console.log("Dealer Card:", this.dealer.cards[0]);
+                messageText.textContent = "Do you want to draw a new card?";
                 
             }else {
 
@@ -217,14 +238,20 @@ class Game{
 
                     if(this.player.sumCards() > this.dealer.sumCards()){
                         console.log(this.player.sumCards() + 
-                                    " beats " + this.dealer.sumCards() + ". You win!");                      
+                                    " beats " + this.dealer.sumCards() + ". You win!");
+                        messageText.textContent = this.player.sumCards() + 
+                                    " beats " + this.dealer.sumCards() + ". You win!";                      
                     } else if(this.player.sumCards() < this.dealer.sumCards()){
                         console.log(this.dealer.sumCards() + 
                                     " beats " + this.player.sumCards() + ". You lose!");
+                        messageText.textContent = this.dealer.sumCards() + 
+                                    " beats " + this.player.sumCards() + ". You lose!";
 
                     } else {
                         console.log(this.dealer.sumCards() + 
                                     " = " + this.player.sumCards() + ". It's a push");
+                        messageText.textContent = this.dealer.sumCards() + 
+                                    " = " + this.player.sumCards() + ". It's a push";            
                     }
                     this.gameStatus = "over";
                     break;
@@ -241,12 +268,15 @@ class Game{
                         console.log("Current deal count:", this.dealCount);
                         console.log("You received a",this.player.cards[this.player.cards.length-1]);
                         console.log("Your new sum is ", this.player.sumCards());
+                        cardsText.textContent = this.player.cards;
+                        sumText.textContent = this.player.sumCards();
                         // Deck test
                         // this.deck.summarize();
 
                         // Check for bust
                         if(this.player.status()=="Bust"){
                             console.log("You busted! You lose :(");
+                            messageText.textContent = "You busted! You lose :(";
                             this.gameStatus = "over";
                             //break;
                         }   
@@ -280,7 +310,8 @@ class Game{
                 this.dealerDone = true;
             // If made it here, neither you nor dealer have busted. So can continue
 
-            }
+            } // While loop
+            messageText.textContent = this.status;
             // this.dealCount++;    
             // TODO ask player if they want to play again
         
