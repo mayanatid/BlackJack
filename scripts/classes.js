@@ -68,12 +68,17 @@ function createDeck(){
 }
 
 //-------------DOM PROPERTIES-------------
-let startButton = document.getElementById("start-el");
 let messageText = document.getElementById("message-el");
 let cardsText = document.getElementById("card-el");
 let sumText = document.getElementById("sum-el");
 let dealerCardsText = document.getElementById("dealer-card-el");
 let dealerSumText = document.getElementById("dealer-sum-el");
+let drawCardAction = document.getElementById("drawcard-el");
+let startButton = document.getElementById("start-el");
+let drawButton = document.getElementById("newcard-el");
+let stayButton = document.getElementById("stay-el");
+let replayButton = document.getElementById("replay-el");
+
 
 
 // -------------CLASSES-------------
@@ -202,7 +207,120 @@ class Game{
         //this.dealer.deck.summarize();
     }
 
-    
+    playAgain = function(){
+
+        drawButton.hidden = true;
+        stayButton.hidden = true;
+        replayButton.hidden= false;
+
+    }
+
+    // Want to break up multiple functions
+    // We have:
+    // 1.) Initial cards
+    // 2.) Decision of whether to hit or not
+    // 3.) Dealer hits
+    // Function responsible for initial cards 
+    // - Shows player cards and one card from dealer
+    // - Determines whether dealer has blackjack
+    initialHand = function(){
+        // 1.) Initial cards
+        // Function responsible for initial cards 
+        // - Shows player cards and one card from dealer
+        // - Determines whether dealer has blackjack
+        
+        // Hide "START GAME" button
+        startButton.hidden=true;
+        drawButton.hidden=false;
+        stayButton.hidden=false;
+
+        cardsText.textContent = "Cards: " + this.player.cards;
+        sumText.textContent = "Sum: " + this.player.sumCards();
+        dealerCardsText.textContent = "Cards: " + this.dealer.cards[0];
+
+        if(this.dealer.status() == "BlackJack"){
+            messageText.textContent = "Dealer has BlackJack! You lose";
+            dealerCardsText.textContent = this.dealer.cards;
+            dealerSumText.textContent = this.dealerCards.sumCards();
+            console.log("Dealer has BlackJack! You lose");
+            this.gameStatus = "over";
+            this.playAgain();
+        } else{
+            messageText.textContent = "Draw another card?"
+        }
+    }
+
+    drawHand = function(){
+        // this function is called when draw card is pressed
+        if(this.gameStatus=="going"){
+            this.player.draw();
+            console.log("\n");
+            console.log("You received a",this.player.cards[this.player.cards.length-1]);
+            console.log("Your new sum is ", this.player.sumCards());
+            cardsText.textContent = "Cards: " + this.player.cards;
+            sumText.textContent = "Sum: :" + this.player.sumCards();
+
+            // Check for bust
+            if(this.player.status()=="Bust"){
+                console.log("You busted! You lose :(");
+                messageText.textContent = "You busted! You lose :(";
+                this.gameStatus = "over";
+                this.playAgain();
+            }
+        }
+        
+    }
+
+    stayHand = function(){
+        // This function is called when stay is pressed
+        if(this.gameStatus="going"){
+            dealerCardsText.textContent = "Dealer Cards: " + this.dealer.cards;
+            dealerSumText.textContent = "Dealer Sum: " + this.dealer.sumCards();
+            while(this.dealer.sumCards()<16){
+                this.dealer.draw();
+                dealerCardsText.textContent = "Dealer Cards: " + this.dealer.cards;
+                dealerSumText.textContent = "Dealer Sum: " + this.dealer.sumCards();
+                console.log("\n");
+                console.log("Dealer received a",this.dealer.cards[this.dealer.cards.length - 1]);
+                console.log("New dealer cards are: ", this.dealer.cards);
+                console.log("New dealer sum is ", this.dealer.sumCards());
+                
+                // Check for bust
+                if(this.dealer.status()=="Bust"){
+                    messageText.textContent = "Dealer busted! You win :)";
+                    console.log("Dealer busted! You win :)");
+                    this.gameStatus = "over";
+                    this.playAgain();
+        
+                }   
+            } // End while
+
+            if(this.gameStatus == "going"){
+                // If here, dealer cards are 16 or higher and has not busted
+                // Case 1: dealer cards are higher than player
+                if(this.dealer.sumCards() > this.player.sumCards()){
+                    messageText.textContent = this.dealer.sumCards() + " beats " + this.player.sumCards()
+                                            + ". You lose :(";
+                // Case 2: player cards are higher than dealer
+                } else if(this.dealer.sumCards() < this.player.sumCards()){
+                    messageText.textContent = this.player.sumCards() + " beats " + this.dealer.sumCards()
+                                            + ". You win :)";
+                // Case 3: player and dealer have same sum
+                } else {
+                    messageText.textContent = this.player.sumCards() + " = " + this.dealer.sumCards()
+                                            + ". It's a push.";
+                }
+                this.gameStatus = "over";
+                this.playAgain();
+            }
+            
+        }
+    }
+
+
+
+
+    // OLD: was used when UI was just console 
     dealCards = function(){
         console.log("Current deal count:", this.dealCount);
         while(this.gameStatus!="over"){
@@ -224,7 +342,7 @@ class Game{
                 console.log("Your cards:",this.player.cards);
                 sumText.textContent = "Sum: " + this.player.sumCards();
                 console.log("Your card sum:",this.player.sumCards());
-                dealerCardsText.textContent = this.dealer.cards[0];
+                dealerCardsText.textContent = "Cards: " + this.dealer.cards[0];
                 console.log("Dealer Card:", this.dealer.cards[0]);
                 messageText.textContent = "Do you want to draw a new card?";
                 
@@ -260,8 +378,8 @@ class Game{
 
             // If player is still playing, check whether want to hit or not
             if(this.playerDone == false){
-                const hit = prompt("Hit? (Y for yes)");
-                    if(hit == "Y"|| hit == "Yes"){
+                //const hit = prompt("Hit? (Y for yes)");
+                    if(drawCardAction.textContent=="draw"){
                         this.player.draw();
                         this.dealCount++;
                         console.log("\n");
@@ -286,6 +404,8 @@ class Game{
 
                         this.playerDone = true;
                     }
+                    // Reset drawCard Action
+                    drawCardAction.textContent="false"
             }
             // If dealer is below 16 then they draw, otherwise not
             if(this.playerDone == true){
