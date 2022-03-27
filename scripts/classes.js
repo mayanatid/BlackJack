@@ -134,6 +134,12 @@ class Deck{
 // Added: deck input which becomes 
 // Potential Add: bankroll? Will have ability to put some amount and 
 // win; will keep track of winnings/losses?
+
+// Further thoughts on bankroll: construct hand with default amount
+// call it $100; create function that can reset the bankroll
+// I think it will have to be a parameter in the way the index.js
+// is currently set up; currently each game creates a new Hand object
+// If bankroll is to be persistant across hands we need it as a parameter
 class Hand{
     constructor(dealer, deck){
         this.dealer = dealer;
@@ -212,6 +218,17 @@ class Game{
         drawButton.hidden = true;
         stayButton.hidden = true;
         replayButton.hidden= false;
+        this.gameStatus="going";
+
+        if (this.dealCount > 3){
+            // After three hands, reshuffle deck
+            this.deck = new Deck();
+            this.deck.shuffle();
+            this.dealCount = 1;
+            console.log("DECK SHUFFLED");
+        } else {
+            this.dealCount++;
+        }
 
     }
 
@@ -231,12 +248,14 @@ class Game{
         
         // Hide "START GAME" button
         startButton.hidden=true;
+        replayButton.hidden = true;
         drawButton.hidden=false;
         stayButton.hidden=false;
 
         cardsText.textContent = "Cards: " + this.player.cards;
         sumText.textContent = "Sum: " + this.player.sumCards();
         dealerCardsText.textContent = "Cards: " + this.dealer.cards[0];
+        dealerSumText.textContent = "Sum:";
 
         if(this.dealer.status() == "BlackJack"){
             messageText.textContent = "Dealer has BlackJack! You lose";
@@ -291,6 +310,7 @@ class Game{
                     console.log("Dealer busted! You win :)");
                     this.gameStatus = "over";
                     this.playAgain();
+                    return; // Exit function so doesn't go to next if statement
         
                 }   
             } // End while
@@ -440,6 +460,17 @@ class Game{
 
 
     }
+}
+
+// BankRoll class
+// Will be associated with a player
+// Does it make more sense to have it as a property of a player?
+class BankRoll {
+    constructor(amount){
+        this.totalAmt = amount;
+
+    }
+
 }
 
 export {shuffleArray,generateCard, sumCards, checkAce, createDeck,

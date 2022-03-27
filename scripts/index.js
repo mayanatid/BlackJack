@@ -14,10 +14,10 @@ const replayButton = document.getElementById("replay-el");
 
 const game = new classes.Game();
 
-startButton.addEventListener("click", main);
-drawButton.addEventListener("click", clickDrawCard);
-stayButton.addEventListener("click", clickStay);
-replayButton.addEventListener("click", playAgain);
+// startButton.addEventListener("click", main);
+// drawButton.addEventListener("click", clickDrawCard);
+// stayButton.addEventListener("click", clickStay);
+// replayButton.addEventListener("click", playAgain);
 
 
 
@@ -38,7 +38,13 @@ function clickStay(){
 }
 
 function playAgain(){
-    location.reload();
+    //location.reload();
+    game.player = new classes.Hand(false,game.deck);
+    game.dealer = new classes.Hand(true,game.deck);
+    console.log("Player cards: ", game.player.cards);
+    console.log("Dealer cards: ", game.dealer.cards);
+    console.log(game.deck.summarize());
+    startGame();
 }
 
 
@@ -53,4 +59,8 @@ function main(){
 
 }
 
+startButton.addEventListener("click", main);
+drawButton.addEventListener("click", clickDrawCard);
+stayButton.addEventListener("click", clickStay);
+replayButton.addEventListener("click", playAgain);
 
