@@ -93,27 +93,34 @@ function clickStay(){
 function playAgain(){
     // Store bankroll to set after new player created
     let tempBankroll = game.player.bankroll;
-    game.player = new classes.Hand(false,game.deck);
-    game.player.setBankroll(tempBankroll);
-    game.dealer = new classes.Hand(true,game.deck);
-    console.log("Player cards: ", game.player.cards);
-    console.log("Dealer cards: ", game.dealer.cards);
-    console.log(game.deck.summarize());
 
-    // UI configurations
-    buttonControl.hidden=true;
-    startButton.hidden=false;
-    replayButton.hidden=true;
-    betDiv.hidden=false;
-    //messageText.hidden=true;
+    if(tempBankroll <=0 ){
+        messageText.textContent = "You're all out of money!\n Refresh page to set new bankroll";
+        
 
-    messageText.textContent = "";
-    dealerCards.textContent = "Cards: ";
-    dealerSum.textContent = "Sum: ";
-    playerCards.textContent ="Cards: "; 
-    playerSum.textContent = "Sum: ";
+    } else{
 
+        game.player = new classes.Hand(false,game.deck);
+        game.player.setBankroll(tempBankroll);
+        game.dealer = new classes.Hand(true,game.deck);
+        console.log("Player cards: ", game.player.cards);
+        console.log("Dealer cards: ", game.dealer.cards);
+        console.log(game.deck.summarize());
 
+        // UI configurations
+        buttonControl.hidden=true;
+        startButton.hidden=false;
+        replayButton.hidden=true;
+        betDiv.hidden=false;
+        //messageText.hidden=true;
+
+        messageText.textContent = "";
+        dealerCards.textContent = "Cards: ";
+        dealerSum.textContent = "Sum: ";
+        playerCards.textContent ="Cards: "; 
+        playerSum.textContent = "Sum: ";
+
+    }
     //startGame();
 }
 
