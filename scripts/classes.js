@@ -78,6 +78,10 @@ let startButton = document.getElementById("start-el");
 let drawButton = document.getElementById("newcard-el");
 let stayButton = document.getElementById("stay-el");
 let replayButton = document.getElementById("replay-el");
+let playerDiv = document.getElementById("player-cards-el");
+let dealerDiv = document.getElementById("dealer-cards-el");
+let betDiv = document.getElementById("bet-div");
+let buttonCtrlDiv = document.getElementById("button-control-div");
 
 
 
@@ -112,6 +116,10 @@ class Deck{
     // Shuffle deck using shuffleArray helper function.
     shuffle = function(){
         this.deck = shuffleArray(this.deck);      
+    }
+
+    getLength = function(){
+        return this.deck.length;
     }
 
     
@@ -209,7 +217,7 @@ class Game{
     }
 
     deckSummary = function(){
-        this.deck.summarize;
+        this.deck.summarize();
         //this.dealer.deck.summarize();
     }
 
@@ -220,8 +228,8 @@ class Game{
         replayButton.hidden= false;
         this.gameStatus="going";
 
-        if (this.dealCount > 3){
-            // After three hands, reshuffle deck
+        if (this.deck.getLength() < 24){
+            // Once hit 50% of deck, reshuffle deck
             this.deck = new Deck();
             this.deck.shuffle();
             this.dealCount = 1;
@@ -251,6 +259,10 @@ class Game{
         replayButton.hidden = true;
         drawButton.hidden=false;
         stayButton.hidden=false;
+        playerDiv.hidden=false;
+        dealerDiv.hidden=false;
+        betDiv.hidden=true;
+        buttonCtrlDiv.hidden = false;
 
         cardsText.textContent = "Cards: " + this.player.cards;
         sumText.textContent = "Sum: " + this.player.sumCards();
@@ -259,8 +271,8 @@ class Game{
 
         if(this.dealer.status() == "BlackJack"){
             messageText.textContent = "Dealer has BlackJack! You lose";
-            dealerCardsText.textContent = this.dealer.cards;
-            dealerSumText.textContent = this.dealerCards.sumCards();
+            dealerCardsText.textContent = "Dealer Cards: " + this.dealer.cards;
+            dealerSumText.textContent = "Dealer Sum: " + this.dealer.sumCards();
             console.log("Dealer has BlackJack! You lose");
             this.gameStatus = "over";
             this.playAgain();
@@ -277,7 +289,7 @@ class Game{
             console.log("You received a",this.player.cards[this.player.cards.length-1]);
             console.log("Your new sum is ", this.player.sumCards());
             cardsText.textContent = "Cards: " + this.player.cards;
-            sumText.textContent = "Sum: :" + this.player.sumCards();
+            sumText.textContent = "Sum: " + this.player.sumCards();
 
             // Check for bust
             if(this.player.status()=="Bust"){

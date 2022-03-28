@@ -2,11 +2,14 @@ import * as classes from "./classes.js"
 
 
 // Add event listeners to button for onclick
+const messageText = document.getElementById("message-el");
 const startButton = document.getElementById("start-el");
 const drawButton = document.getElementById("newcard-el");
 const stayButton = document.getElementById("stay-el");
 const drawCardAction = document.getElementById("drawcard-el");
 const replayButton = document.getElementById("replay-el");
+const betInput = document.getElementById("bet-div");
+const buttonControl = document.getElementById("button-control-div");
 // const stayAction = document.getElementById("stay-el");
 
 // create Game object
@@ -44,7 +47,15 @@ function playAgain(){
     console.log("Player cards: ", game.player.cards);
     console.log("Dealer cards: ", game.dealer.cards);
     console.log(game.deck.summarize());
-    startGame();
+
+    // UI configurations
+    buttonControl.hidden=true;
+    startButton.hidden=false;
+    replayButton.hidden=true;
+    betInput.hidden=false;
+    //messageText.hidden=true;
+
+    //startGame();
 }
 
 

@@ -8,18 +8,53 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Blackjack</h2>
-    <p id="message-el">Want to play a round?</p>
-    <p id="card-el">Cards:</p>
-    <p id="sum-el">Sum:</p>
-    <button id="start-el">START GAME</button>
-    <button id="newcard-el" hidden="true">DRAW CARD</button>
+    <h1>Blackjack</h1>
+    <div id="bankroll-el">
+        <div style="width: 100%;">
+            <div style="width: 50%; height: 30px; float: left;"> 
+                <h3 style="float:right;margin-right:10px;font-style: italic;color:gold;">Bankroll: $100</h3>
+            </div>
+            
+            <div style="margin-left: 50%; height: 30px;"> 
+                <h3 style="float:left; margin-left:10px;font-style: italic;color:gold;">Current Bet: $5</h3>
+            </div>
+        </div>
+    </div>
+
     <br>
-    <button id="stay-el" hidden="true">STAY</button>
-    <button id="replay-el" hidden="true">PLAY AGAIN?</button>
-    <h3>Dealer</h3>
-    <p id="dealer-card-el">Cards:</p>
-    <p id="dealer-sum-el">Sum:</p>
+    <div id="dealer-cards-el" hidden="true">
+        <p id="title-el">Dealer Cards<p>
+        <p id="dealer-card-el">Cards:</p>
+        <p id="dealer-sum-el">Sum:</p>
+        <br>
+    </div>
+    <p id="message-el">Make a bet and click START GAME to begin</p>
+    <div id="player-cards-el" hidden="true">
+        <br>
+        <p id="title-el">Your Cards</p>
+        <p id="card-el">Cards:</p>
+        <p id="sum-el">Sum:</p>
+    </div>
+   
+    <div id="button-control-div" hidden="true">
+        <br>
+        <button id="replay-el" hidden="true">PLAY AGAIN?</button> 
+        <button id="newcard-el" hidden="true">DRAW CARD</button>
+        <br>
+        <button id="stay-el" hidden="true">STAY</button>   
+    </div>
+    <div id="bet-div">
+        <label for="bet-input">Enter Bet Amount:</label>
+        <br> <br>
+        <input type="text" name="bet-input" id="bet-el">
+        <br>
+        <br>
+        <button id="start-el">START GAME</button>
+    </div>
+  
+    
+    
+    
 
     <p id="drawcard-el" hidden="true">false</p>
     <script type= "module" src="scripts/index.js"></script>
