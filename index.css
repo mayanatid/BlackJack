@@ -20,14 +20,25 @@ h1{
 }
 
 p{
-    font-size: 20px;
+    font-size: 23px;
+}
+
+.bankroll-class{
+    font-style: italic;
+    color: gold;
+
 }
 
 #title-el {
     text-decoration: underline;
     font-style: italic;
-    font-size: 20px;
+    font-size: 23px;
     font-weight: bold;
+}
+
+#bankroll-msg-el{
+    font-style: italic;
+    font-size: 23px;
 }
 
 label{

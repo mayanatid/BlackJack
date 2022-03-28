@@ -82,6 +82,9 @@ let playerDiv = document.getElementById("player-cards-el");
 let dealerDiv = document.getElementById("dealer-cards-el");
 let betDiv = document.getElementById("bet-div");
 let buttonCtrlDiv = document.getElementById("button-control-div");
+let currBetText = document.getElementById("current-bet-el");
+let dblDownButton = document.getElementById("dbl-el");
+
 
 
 
@@ -153,6 +156,8 @@ class Hand{
         this.dealer = dealer;
         this.deck = deck;
         this.cards = [];
+        this.bankroll = 0;
+        this.bet = 0;
         // Generate two cards
         this.cards.push(this.deck.draw())
         this.cards.push(this.deck.draw())
@@ -163,6 +168,9 @@ class Hand{
         }
     }
 
+    setBankroll = function(amt){
+        this.bankroll = amt * 1;
+    }
     // Sum up cards in hand
     sumCards = function(){
         let sum = 0;
@@ -181,6 +189,10 @@ class Hand{
                 }
             }
         }
+    }
+
+    setBet= function(bet){
+        this.bet = bet * 1;
     }
 
     draw = function(){
@@ -263,6 +275,8 @@ class Game{
         dealerDiv.hidden=false;
         betDiv.hidden=true;
         buttonCtrlDiv.hidden = false;
+        currBetText.hidden = false;
+        dblDownButton.hidden=false;
 
         cardsText.textContent = "Cards: " + this.player.cards;
         sumText.textContent = "Sum: " + this.player.sumCards();
@@ -275,6 +289,7 @@ class Game{
             dealerSumText.textContent = "Dealer Sum: " + this.dealer.sumCards();
             console.log("Dealer has BlackJack! You lose");
             this.gameStatus = "over";
+            this.player.bankroll -= this.player.bet;
             this.playAgain();
         } else{
             messageText.textContent = "Draw another card?"
@@ -296,6 +311,7 @@ class Game{
                 console.log("You busted! You lose :(");
                 messageText.textContent = "You busted! You lose :(";
                 this.gameStatus = "over";
+                this.player.bankroll -= this.player.bet;
                 this.playAgain();
             }
         }
@@ -321,6 +337,7 @@ class Game{
                     messageText.textContent = "Dealer busted! You win :)";
                     console.log("Dealer busted! You win :)");
                     this.gameStatus = "over";
+                    this.player.bankroll += this.player.bet;
                     this.playAgain();
                     return; // Exit function so doesn't go to next if statement
         
@@ -333,10 +350,12 @@ class Game{
                 if(this.dealer.sumCards() > this.player.sumCards()){
                     messageText.textContent = this.dealer.sumCards() + " beats " + this.player.sumCards()
                                             + ". You lose :(";
+                    this.player.bankroll -= this.player.bet;
                 // Case 2: player cards are higher than dealer
                 } else if(this.dealer.sumCards() < this.player.sumCards()){
                     messageText.textContent = this.player.sumCards() + " beats " + this.dealer.sumCards()
                                             + ". You win :)";
+                this.player.bankroll += this.player.bet;
                 // Case 3: player and dealer have same sum
                 } else {
                     messageText.textContent = this.player.sumCards() + " = " + this.dealer.sumCards()
@@ -350,7 +369,7 @@ class Game{
     }
 
 
-
+    
 
     // OLD: was used when UI was just console 
     dealCards = function(){
