@@ -283,6 +283,10 @@ class Game{
         dealerCardsText.textContent = "Cards: " + this.dealer.cards[0];
         dealerSumText.textContent = "Sum:";
 
+        // TODO: Need to add logic for initial hand blackjack:
+        // 1.) If dealer and player have blackjack then push
+        // 2.) If player has blackjack and dealer doesn't then gets paid 3/2 and game ends
+
         if(this.dealer.status() == "BlackJack"){
             messageText.textContent = "Dealer has BlackJack! You lose";
             dealerCardsText.textContent = "Dealer Cards: " + this.dealer.cards;
